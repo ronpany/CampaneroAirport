@@ -545,6 +545,437 @@ public class ControladorRegistros implements ActionListener{
         
     return band;    
     }
+//================================== ALQUILAR HANGAR ==================================================================================
+    public void refrescar(){
+         try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            alquilarAvion.getTbl_hangares().setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConnection();
+
+            String sql = "SELECT idhangar, alto, largo, ancho, estado, tarifa FROM hangar";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modelo.addColumn("ID Hangar");
+            modelo.addColumn("Alto");
+            modelo.addColumn("Largo");
+            modelo.addColumn("Ancho");
+            modelo.addColumn("Estado");
+            modelo.addColumn("Tarifa/Hora");
+
+            while(rs.next()){
+
+                Object [] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i+1);
+                }
+
+                modelo.addRow(filas);
+            }
+            
+
+        }catch(SQLException ex){
+
+            System.err.println(ex.toString());
+        }
+         
+        for(int i = 0; i<alquilarAvion.getTbl_hangares().getRowCount(); i++) {//para recorrer la filas de jtabla
+                           
+                String s = alquilarAvion.getTbl_hangares().getValueAt(i, 4).toString();
+                
+                if(!s.equals("0")){
+                    alquilarAvion.getTbl_hangares().setValueAt("NO DISPONIBLE", i, 4);                   
+                }
+                else{                
+                    alquilarAvion.getTbl_hangares().setValueAt("DISPONIBLE", i, 4);  
+                }             
+            
+        }
+        
+    }  
+
+    public void alquilar(){
+        
+        try {
+            
+        int indice_1 = alquilarAvion.getTbl_hangares().getSelectedRow();        
+        
+        if(indice_1<0){
+        
+            JOptionPane.showMessageDialog(null, "ESCOJA UN HANGAR PARA ALQUILAR"); 
+            
+        }else{
+            String indice = alquilarAvion.getTbl_hangares().getValueAt(alquilarAvion.getTbl_hangares().getSelectedRow(), 4).toString();
+            if (indice.equals("NO DISPONIBLE")){
+        
+            JOptionPane.showMessageDialog(null, "EL HANGAR YA ESTA OCUPADO, ESCOJA UN HANGAR DISPONIBLE"); 
+        }
+        else{
+            
+            alquilarFinal.setVisible(true);
+                        
+        }
+        }
+        index=(int)alquilarAvion.getTbl_hangares().getValueAt(alquilarAvion.getTbl_hangares().getSelectedRow(),0);
+        alto= alquilarAvion.getTbl_hangares().getValueAt(alquilarAvion.getTbl_hangares().getSelectedRow(), 1).toString();
+        largo=alquilarAvion.getTbl_hangares().getValueAt(alquilarAvion.getTbl_hangares().getSelectedRow(), 2).toString();
+        ancho=alquilarAvion.getTbl_hangares().getValueAt(alquilarAvion.getTbl_hangares().getSelectedRow(), 3).toString();
+        tarifa=alquilarAvion.getTbl_hangares().getValueAt(alquilarAvion.getTbl_hangares().getSelectedRow(), 5).toString();
+        } catch (Exception e) {
+            
+        }
+        
+    }
+    
+    
+    public void refrescarAviones(){
+    
+        try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            alquilarFinal.getTbl_aviones().setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConnection();
+
+            String sql = "SELECT idavion, alto, largo, ancho, idcliente, estado FROM avion";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modelo.addColumn("Matricula");
+            modelo.addColumn("Alto");
+            modelo.addColumn("Largo");
+            modelo.addColumn("Ancho");
+            modelo.addColumn("ID Cliente");
+            modelo.addColumn("Estado");
+
+            while(rs.next()){
+
+                Object [] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i+1);
+                }
+
+                modelo.addRow(filas);
+            }
+            
+
+        }catch(SQLException ex){
+
+            System.err.println(ex.toString());
+        }
+        
+        for(int i = 0; i<alquilarFinal.getTbl_aviones().getRowCount(); i++) {//para recorrer la filas de jtabla
+                           
+                String s = alquilarFinal.getTbl_aviones().getValueAt(i, 5).toString();
+                
+                if(!s.equals("0")){
+                    alquilarFinal.getTbl_aviones().setValueAt("EN HANGAR", i, 5);                   
+                }
+                else{                
+                    alquilarFinal.getTbl_aviones().setValueAt("SIN HANGAR", i, 5);  
+                }             
+            
+        }
+    }
+    
+    public void buscarAvionesHangar(){
+        String matricula    = alquilarFinal.getTxt_matricula().getText();
+        String where        = "";
+        
+        if(!matricula.equals("")){
+        
+            where = "WHERE idavion = '"+matricula+"'";
+        }
+        else{JOptionPane.showMessageDialog(null, "INGRESE UNA MATRICULA");}
+        try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            alquilarFinal.getTbl_aviones().setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConnection();
+
+            String sql = "SELECT idavion, alto, largo, ancho, idcliente FROM avion "+where;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modelo.addColumn("Matricula");
+            modelo.addColumn("Alto");
+            modelo.addColumn("Largo");
+            modelo.addColumn("Ancho");
+            modelo.addColumn("ID Cliente");
+
+            while(rs.next()){
+
+                Object [] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i+1);
+                }
+
+                modelo.addRow(filas);
+            }
+            
+
+        }catch(SQLException ex){
+
+            System.err.println(ex.toString());
+        }
+        
+    }
+    
+    public void GuardarAlquiler(int idhangar, String alto, String largo, String ancho,String tarifa){
+        
+        if (alquilarFinal.getDtc_entrada().getDate()!=null&&!alquilarFinal.getTxt_Horas().getText().equals("")){
+            int horas = Integer.parseInt(alquilarFinal.getTxt_Horas().getText());
+            Calendar fecha_entrada  = alquilarFinal.getDtc_entrada().getCalendar();
+          
+            try {
+                String s = alquilarFinal.getTbl_aviones().getValueAt(alquilarFinal.getTbl_aviones().getSelectedRow(), 5).toString();
+                System.out.println(s);
+
+           if (s.equals("EN HANGAR")){
+
+               JOptionPane.showMessageDialog(null, "ESCOJA UN AVION SIN HANGAR");
+           }
+           else{ 
+                String x = alquilarFinal.getTbl_aviones().getValueAt(alquilarFinal.getTbl_aviones().getSelectedRow(), 1).toString();
+                int alto_1 = Integer.parseInt(x);
+
+                x = alquilarFinal.getTbl_aviones().getValueAt(alquilarFinal.getTbl_aviones().getSelectedRow(), 2).toString();
+                int largo_1 = Integer.parseInt(x);
+
+                x = alquilarFinal.getTbl_aviones().getValueAt(alquilarFinal.getTbl_aviones().getSelectedRow(), 3).toString();
+                int ancho_1 = Integer.parseInt(x);
+
+                int alto_2  = Integer.parseInt(alto);
+                int largo_2 = Integer.parseInt(largo);
+                int ancho_2 = Integer.parseInt(ancho);
+
+                String matricula_avion = alquilarFinal.getTbl_aviones().getValueAt(alquilarFinal.getTbl_aviones().getSelectedRow(), 0).toString();
+
+                if(alto_1<alto_2 && largo_1<largo_2 && ancho_1<ancho_2){
+                    if(buscarAvionHangar()){
+                     PreparedStatement PS;
+                     Connection CN =null;
+                     String idavion = alquilarFinal.getTxt_matricula().getText();
+
+                     String sql = "UPDATE hangar SET estado ="+idavion+" WHERE idhangar ="+idhangar;
+                     int res =0;
+                     try {
+                     CN= Conexion.getConnection();
+                     PS=CN.prepareStatement(sql);
+                     res = PS.executeUpdate();
+                     if(res>0){                
+                         String estado = idhangar+"";
+                         sql = "UPDATE avion SET estado ="+estado+" WHERE idavion ="+matricula_avion;
+                         res =0;
+                         try{
+                             CN= Conexion.getConnection();
+                             PS=CN.prepareStatement(sql);
+                             res= PS.executeUpdate();
+                             if(res>0){
+                                float tarifaFloat    = Float.parseFloat(tarifa);
+                                int   horasInt       = Integer.parseInt(alquilarFinal.getTxt_Horas().getText());
+                                float total          = tarifaFloat * horasInt;
+                                
+                                String dia = Integer.toString(alquilarFinal.getDtc_entrada().getCalendar().get(Calendar.DAY_OF_MONTH));
+                                String mes = Integer.toString(alquilarFinal.getDtc_entrada().getCalendar().get(Calendar.MONTH) + 1);
+                                String year = Integer.toString(alquilarFinal.getDtc_entrada().getCalendar().get(Calendar.YEAR));
+                                String fechatipostring = (year + "-" + mes+ "-" + dia);
+                                sql = "INSERT INTO registro (idregistro,entrada,salida,idhangar,idavion,total,tiempo) VALUES(?,?,?,?,?,?,?)";
+                                Connection conectar;
+                                PreparedStatement pst;
+                                try {
+                                    conectar = Conexion.getConnection();
+                                    pst = conectar.prepareStatement(sql);
+                                    pst.setInt(1, 0);
+                                    pst.setString(2, fechatipostring);
+                                    pst.setString(3, "0");
+                                    pst.setInt(4, idhangar);
+                                    pst.setString(5, idavion);
+                                    pst.setFloat(6, total);
+                                    pst.setInt(7, horasInt);
+                                    int i = pst.executeUpdate();
+                                    if(i!=0){
+                                        Connection con = null;
+                                        try {
+                                            con = Conexion.getConnection();
+                                            PreparedStatement ps = con.prepareStatement("SELECT idregistro FROM registro WHERE idhangar = ?");
+                                            ps.setInt(1, idhangar);
+                                            ResultSet rs = ps.executeQuery();
+                                            if(rs.next()){
+                                                int id = rs.getInt("idregistro");
+                                                factura.getLbl_NumeroFactura().setText(id+"");
+                                                factura.getLbl_MatriculaAvion().setText(idavion);
+                                                factura.getLbl_NumeroHangar().setText(idhangar+"");
+                                                factura.getLbl_TotalHoras().setText(horasInt+"");
+                                                factura.getLbl_tarifa().setText(tarifa);
+                                                factura.getLbl_total().setText(total+"");
+                                                factura.setVisible(true);
+                                                JOptionPane.showMessageDialog(null, "Se Registro Exitosamente");
+                                            }else{}
+                                        } catch (Exception e) {
+                                            System.out.println(e);
+                                        }                                        
+                                        
+                                    }
+                                } catch (SQLException e) {
+                                    System.out.println(e);
+                                }                            
+                                
+                                 refrescarAviones();
+                             }
+                         }catch(SQLException e){
+                             JOptionPane.showMessageDialog(null, "NO SE PUDO CONECTAR CON LA BASE DE DATOS!");
+                         }
+                     }
+                     } catch (SQLException e) {
+                         JOptionPane.showMessageDialog(null, "NO SE PUDO CONECTAR CON LA BASE DE DATOS!");
+                     }
+                     }
+                     else{JOptionPane.showMessageDialog(null, "INGRESE UNA MATRICULA EXISTENTE");}
+                }
+                else {JOptionPane.showMessageDialog(null, "EL AVION ES MUY GRANDE PARA EL HANGAR");}
+
+
+
+           }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "DEBES SELECCIONAR UN AVION! ");
+                }
+            
+        } else {JOptionPane.showMessageDialog(null, "DEBE INGRESAR UNA FECHA Y UN NUMERO DE HORAS! ");}
+        
+    }
+    
+    public boolean buscarAvionHangar(){
+         boolean band = false;
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT idavion FROM avion WHERE idavion = ?");
+            ps.setInt(1, Integer.parseInt(alquilarFinal.getTxt_matricula().getText()));
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int id = rs.getInt("idavion");
+                band = true;
+            }else{}
+        } catch (Exception e) {
+        }       
+                
+    return band;
+    }
+
+    // --------------------- CONSULTAR CLIENTE --------------------------------------------------
+    public boolean consultarCliente(){
+        boolean band = false;
+        if (validarCamposConsultarCliente()&&buscarClienteconID(Integer.parseInt(consultarCliente.getTxt_idcliente().getText()))){
+            Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT idcliente,nombre,email,direccion,telefono FROM cliente WHERE idcliente = ?");
+             ps.setInt(1, Integer.parseInt(consultarCliente.getTxt_idcliente().getText()));
+            ResultSet rs = ps.executeQuery();
+            String nombre ="";
+            String email="";
+            String direccion="";
+            String telefono="";
+            if(rs.next()){
+                nombre = rs.getString("nombre");
+                email = rs.getString("email");
+                direccion = rs.getString("direccion");
+                telefono = rs.getString("telefono");
+                consultarCliente.getTxt_nombre().setText(nombre);
+                consultarCliente.getTxt_email().setText(email);
+                consultarCliente.getTxt_direccion().setText(direccion);
+                consultarCliente.getTxt_telefono().setText(telefono);                
+            }
+ 
+            
+            
+        } catch (Exception e) {
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "EL CLIENTE NO EXISTE"); 
+        }
+        return band;
+    }
+    public boolean validarCamposConsultarCliente(){
+        boolean band = false;
+        if(consultarCliente.getTxt_idcliente().getText().equals("")){
+            JOptionPane.showMessageDialog(null, "INGRESE UNA IDENTIFICACION!");
+            
+        }else{band=true;}
+        
+        return band;
+    }
+    // Este metodo busca a un cliente por su cedula
+    public boolean buscarClienteconID(int idcliente){
+        boolean band = false;
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT idcliente FROM cliente WHERE idcliente = ?");
+            ps.setInt(1, idcliente);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int id = rs.getInt("idcliente");
+                band = true;
+            }else{}
+        } catch (Exception e) {
+        }
+        
+        
+        
+    return band;
+    }
+     
+    public void modificarCliente(){
+     
+         if(consultarCliente.getTxt_direccion().getText().equals("")||consultarCliente.getTxt_email().getText().equals("")||consultarCliente.getTxt_idcliente().getText().equals("")||consultarCliente.getTxt_nombre().getText().equals("")||consultarCliente.getTxt_telefono().getText().equals("")){
+         
+             JOptionPane.showMessageDialog(null, "INGRESE TODOS LOS DATOS"); 
+         }
+         else{
+             if (buscarClienteconID(Integer.parseInt(consultarCliente.getTxt_idcliente().getText()))) {
+                                Connection con = null;
+                                try {
+                                    String v_nombre          = consultarCliente.getTxt_nombre().getText();
+                                    String v_email           = consultarCliente.getTxt_email().getText();
+                                    String v_direccion       = consultarCliente.getTxt_direccion().getText();
+                                    String v_telefono        = consultarCliente.getTxt_telefono().getText();
+                                    int    v_idcliente       = Integer.parseInt(consultarCliente.getTxt_idcliente().getText());
+                                    con = Conexion.getConnection();
+                                    PreparedStatement ps = con.prepareStatement("UPDATE cliente SET  nombre='"+v_nombre+"',email='"+v_email+"',direccion='"+v_direccion+"', telefono='"+v_telefono+"' WHERE idcliente = '"+v_idcliente+"'");
+ 
+                                    ps.executeUpdate();
+                                    JOptionPane.showMessageDialog(null, "ACTUALIZACION EXITOSA");
+
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+             }else{JOptionPane.showMessageDialog(null, "INGRESE EL ID DE UN CLIENTE EXISTENTE");}
+         }
+  }
     
 
 }
