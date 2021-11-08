@@ -976,6 +976,242 @@ public class ControladorRegistros implements ActionListener{
              }else{JOptionPane.showMessageDialog(null, "INGRESE EL ID DE UN CLIENTE EXISTENTE");}
          }
   }
-    
+ // ---------------------------------- CONSULTAR HANGAR ------------------------------------
+    public boolean consultarHangar(){
+        consultarHangar.getTxt_Estado().setEditable(false);
+        boolean band = false;
+        if (validarCamposConsultatHangar()&&buscarHangarID(Integer.parseInt(consultarHangar.getTxt_Hangar().getText()))){
+            Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT alto,largo,ancho,estado,tarifa FROM hangar WHERE idhangar = ?");
+             ps.setInt(1, Integer.parseInt(consultarHangar.getTxt_Hangar().getText()));
+            ResultSet rs = ps.executeQuery();
+            String alto ="";
+            String largo="";
+            String ancho="";
+            String estado="";
+            String tarifa="";
+            if(rs.next()){
+                alto = rs.getString("alto");
+                largo = rs.getString("largo");
+                ancho = rs.getString("ancho");
+                estado = rs.getString("estado");
+                tarifa = rs.getString("tarifa");
+                consultarHangar.getTxt_Alto().setText(alto);
+                consultarHangar.getTxt_Largo().setText(largo);
+                consultarHangar.getTxt_Ancho().setText(ancho);
+                if (estado.equals("0")){
+                    consultarHangar.getTxt_Estado().setText("DISPONIBLE");
+                }
+                else {consultarHangar.getTxt_Estado().setText("NO DISPONIBLE");}
+                consultarHangar.getTxt_tarifa().setText(tarifa);
+            }
+ 
+           
+        } catch (Exception e) {
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "EL HANGAR NO EXISTE"); 
+        }
+        return band;
+    }
+      
+    public boolean validarCamposConsultatHangar(){
+          boolean band = false;
+          if(consultarHangar.getTxt_Hangar().getText().equals("")){
+              JOptionPane.showMessageDialog(null, "INGRESE ID DE HANGAR!");
+              
+          }else{band=true;}
+          return band;
+      }
+      // Este metodo busca hangar por id
+    public boolean buscarHangarID(int idhangar){
+        boolean band = false;
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT idhangar FROM hangar WHERE idhangar = ?");
+            ps.setInt(1, idhangar);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int id = rs.getInt("idhangar");
+                band = true;
+            }else{}
+        } catch (Exception e) {
+        }
+        
+        
+        
+    return band;
+    }
+        
+    public void modificarHangar(){
+        
+            if(consultarHangar.getTxt_Alto().getText().equals("")||consultarHangar.getTxt_Ancho().getText().equals("")||consultarHangar.getTxt_Largo().getText().equals("")||consultarHangar.getTxt_Estado().getText().equals("")||consultarHangar.getTxt_tarifa().getText().equals("")){
+                
+                JOptionPane.showMessageDialog(null, "INGRESE TODOS LOS DATOS");                 
+            }
+            else{
+            
+                if(consultarHangar.getTxt_Estado().getText().equals("NO DISPONIBLE")){
+                    
+                    JOptionPane.showMessageDialog(null, "SOLO SE PUEDEN MODIFICAR HANGARES VACIOS");  
+                }
+                else{
+                
+                   if(buscarHangarID(Integer.parseInt(consultarHangar.getTxt_Hangar().getText()))){
+                   
+                                Connection con = null;
+                                try {
+                                    String v_alto       = consultarHangar.getTxt_Alto().getText();
+                                    String v_ancho      = consultarHangar.getTxt_Ancho().getText();
+                                    String v_largo      = consultarHangar.getTxt_Largo().getText();
+                                    String v_tarifa     = consultarHangar.getTxt_tarifa().getText();
+                                    int    v_idhangar   = Integer.parseInt(consultarHangar.getTxt_Hangar().getText());
+                                    con = Conexion.getConnection();
+                                    PreparedStatement ps = con.prepareStatement("UPDATE hangar SET  alto='"+v_alto+"',largo='"+v_largo+"',ancho='"+v_ancho+"', tarifa='"+v_tarifa+"' WHERE idhangar = '"+v_idhangar+"'");
+ 
+                                    ps.executeUpdate();
+                                    JOptionPane.showMessageDialog(null, "ACTUALIZACION EXITOSA");
+
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+                   } else{JOptionPane.showMessageDialog(null, "EL HANGAR DEBE EXISTIR PARA SER MODIFICADO");  }
+                }
+            }
+            
+        }
+        
+ // ---------------------------------- CONSULTAR AVION ----------------------------------------
+  
+        
+    public boolean consultarAvion(){
+            
+        consultarAvion.getTxt_Estado().setEditable(false);
+        boolean band = false;
+        if (validarCamposConsultarAvion()&&buscarAvionID(Integer.parseInt(consultarAvion.getTxt_Matricula().getText()))){
+            Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT alto,largo,ancho,idcliente,estado FROM avion WHERE idavion = ?");
+             ps.setInt(1, Integer.parseInt(consultarAvion.getTxt_Matricula().getText()));
+            ResultSet rs = ps.executeQuery();
+            
+            String alto ="";
+            String largo="";
+            String ancho="";
+            String cliente="";
+            String estado="";
+            if(rs.next()){
+                alto = rs.getString("alto");
+                largo = rs.getString("largo");
+                ancho = rs.getString("ancho");
+                cliente = rs.getString("idcliente");
+                estado = rs.getString("estado");
+                consultarAvion.getTxt_Alto().setText(alto);
+                consultarAvion.getTxt_Largo().setText(largo);
+                consultarAvion.getTxt_Ancho().setText(ancho);
+                consultarAvion.getTxt_Cliente().setText(cliente);
+                if (estado.equals("0")){
+                    consultarAvion.getTxt_Estado().setText("SIN HANGAR");
+                }
+                else {consultarAvion.getTxt_Estado().setText("EN HANGAR");}
+                
+            }
+ 
+           
+        } catch (Exception e) {
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "EL AVION NO EXISTE"); 
+        }
+        return band;
+    }
+    public boolean validarCamposConsultarAvion(){
+            boolean band = false;
+            if(consultarAvion.getTxt_Matricula().getText().equals("")){
+                JOptionPane.showMessageDialog(null, "INGRESE MATRICULA!"); 
+            }else{band=true;}
+            return band;
+        }
+      // Este metodo busca avion por id
+    public boolean buscarAvionID(int idavion){
+        boolean band = false;
+        Connection con = null;
+        try {
+            con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT idavion FROM avion WHERE idavion = ?");
+            ps.setInt(1, idavion);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int id = rs.getInt("idavion");
+                band = true;
+            }else{}
+        } catch (Exception e) {
+        }
+        
+        
+        
+    return band;
+    }
+
+    public void modificarAvion(){
+            String v_alto           =consultarAvion.getTxt_Alto().getText();
+            String v_ancho          =consultarAvion.getTxt_Ancho().getText();
+            String v_largo          =consultarAvion.getTxt_Largo().getText();
+            String v_cliente        =consultarAvion.getTxt_Cliente().getText();
+            String v_estado         =consultarAvion.getTxt_Estado().getText();
+            String v_matricula      =consultarAvion.getTxt_Matricula().getText();
+            
+            int cliente             =Integer.parseInt(consultarAvion.getTxt_Cliente().getText());
+            
+                    
+            
+            if (v_alto.equals("")||v_ancho.equals("")||v_largo.equals("")||v_cliente.equals("")||v_estado.equals("")||v_matricula.equals("")){
+                JOptionPane.showMessageDialog(null, "INGRESE TODOS LOS DATOS"); 
+            }else{
+                if(v_estado.equals("EN HANGAR")){
+                
+                    JOptionPane.showMessageDialog(null, "EL AVION NO DEBE ESTAR EN UN HANGAR PARA MODIFICARLO"); 
+                }
+                
+                             
+                else{
+                    int matricula     =Integer.parseInt(consultarAvion.getTxt_Matricula().getText());
+                    if (buscarAvionID(matricula)){
+                        if(buscarClienteconID(cliente)){
+                        
+                            Connection con = null;
+                                try {
+                                    
+                                    con = Conexion.getConnection();
+                                    PreparedStatement ps = con.prepareStatement("UPDATE avion SET  alto='"+v_alto+"',largo='"+v_largo+"',ancho='"+v_ancho+"',idcliente='"+v_cliente+"',estado='0' WHERE idavion = '"+v_matricula+"'");
+ 
+                                    ps.executeUpdate();
+                                    JOptionPane.showMessageDialog(null, "ACTUALIZACION EXITOSA");
+
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                } 
+                        
+                        }
+                        else{JOptionPane.showMessageDialog(null, "DEBE INGRESAR UN CLIENTE EXISTENTE");}
+                        
+                            
+                                
+
+                    }
+                    else {JOptionPane.showMessageDialog(null, "AVION CON ESA MATRICULA ANTIGUA NO EXISTE");}
+
+                  
+                    
+                }
+                
+                
+            }
+            
+        }   
 
 }
