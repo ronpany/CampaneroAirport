@@ -1212,6 +1212,279 @@ public class ControladorRegistros implements ActionListener{
                 
             }
             
-        }   
+        }
+//---------------------ELIMINAR HANGAR-----------------
+        
+    public void refrescarBorrarHangar(){
+        
+            try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            borrarHangar.getTbl_Hangares().setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConnection();
+
+            String sql = "SELECT idhangar, alto, largo, ancho, estado, tarifa FROM hangar";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modelo.addColumn("ID Hangar");
+            modelo.addColumn("Alto");
+            modelo.addColumn("Largo");
+            modelo.addColumn("Ancho");
+            modelo.addColumn("Estado");
+            modelo.addColumn("Tarifa/Hora");
+
+            while(rs.next()){
+
+                Object [] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i+1);
+                }
+
+                modelo.addRow(filas);
+            }
+            
+
+        }catch(SQLException ex){
+
+            System.err.println(ex.toString());
+        }
+         
+        for(int i = 0; i<borrarHangar.getTbl_Hangares().getRowCount(); i++) {//para recorrer la filas de jtabla
+                           
+                String s = borrarHangar.getTbl_Hangares().getValueAt(i, 4).toString();
+                
+                if(!s.equals("0")){
+                    borrarHangar.getTbl_Hangares().setValueAt("NO DISPONIBLE", i, 4);                   
+                }
+                else{                
+                    borrarHangar.getTbl_Hangares().setValueAt("DISPONIBLE", i, 4);  
+                }             
+            
+        }
+            
+        }
+        
+    public void eliminarHangar(){
+        
+            int indice_1 = borrarHangar.getTbl_Hangares().getSelectedRow();   
+            
+            if (indice_1<0) {
+                JOptionPane.showMessageDialog(null, "ESCOJA UN HANGAR PARA ELIMINAR");
+            }
+            else{
+                String estado =borrarHangar.getTbl_Hangares().getValueAt(borrarHangar.getTbl_Hangares().getSelectedRow(), 4).toString();
+               
+                if (estado.equals("NO DISPONIBLE")) {
+                    JOptionPane.showMessageDialog(null, "SOLO PUEDE ELIMINAR HANGARES VACIOS");
+                }
+                
+                else{
+                
+                                Connection con = null;
+                                try {
+                                    String id = borrarHangar.getTbl_Hangares().getValueAt(borrarHangar.getTbl_Hangares().getSelectedRow(), 0).toString();
+                                    con = Conexion.getConnection();                                    
+                                    Statement st = con.createStatement();
+                                    String query = "DELETE FROM hangar WHERE idhangar ="+id;
+                                    
+                                    st.executeUpdate(query);
+                                    JOptionPane.showMessageDialog(null, "HANGAR ELIMINADO EXITOSAMENTE");
+
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+                    
+                }
+                
+            }
+            
+        
+        }
+
+     //---------------------ELIMINAR AVION------------------   
+        
+    public void refrescarBorrarAvion(){
+        
+            try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            borrarAvion.getTbl_Aviones().setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConnection();
+
+            String sql = "SELECT idavion, alto, largo, ancho, idcliente, estado FROM avion";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modelo.addColumn("Matricula");
+            modelo.addColumn("Alto");
+            modelo.addColumn("Largo");
+            modelo.addColumn("Ancho");
+            modelo.addColumn("ID Cliente");
+            modelo.addColumn("Estado");
+
+            while(rs.next()){
+
+                Object [] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i+1);
+                }
+
+                modelo.addRow(filas);
+            }
+            
+
+        }catch(SQLException ex){
+
+            System.err.println(ex.toString());
+        }
+        
+        for(int i = 0; i<borrarAvion.getTbl_Aviones().getRowCount(); i++) {//para recorrer la filas de jtabla
+                           
+                String s = borrarAvion.getTbl_Aviones().getValueAt(i, 5).toString();
+                
+                if(!s.equals("0")){
+                    borrarAvion.getTbl_Aviones().setValueAt("EN HANGAR", i, 5);                   
+                }
+                else{                
+                    borrarAvion.getTbl_Aviones().setValueAt("SIN HANGAR", i, 5);  
+                }             
+            
+        }
+        
+        }
+
+    public void eliminarAvion(){
+            int indice_1 = borrarAvion.getTbl_Aviones().getSelectedRow();   
+            
+            if (indice_1<0) {
+                JOptionPane.showMessageDialog(null, "ESCOJA UN AVION PARA ELIMINAR");
+            }
+            else{
+                String estado =borrarAvion.getTbl_Aviones().getValueAt(borrarAvion.getTbl_Aviones().getSelectedRow(), 5).toString();
+               
+                if (estado.equals("EN HANGAR")) {
+                    JOptionPane.showMessageDialog(null, "SOLO PUEDE ELIMINAR AVIONES SIN HANGAR");
+                }
+                
+                else{
+                
+                                Connection con = null;
+                                try {
+                                    String id = borrarAvion.getTbl_Aviones().getValueAt(borrarAvion.getTbl_Aviones().getSelectedRow(), 0).toString();
+                                    con = Conexion.getConnection();                                    
+                                    Statement st = con.createStatement();
+                                    String query = "DELETE FROM avion WHERE idavion ="+id;
+                                    
+                                    st.executeUpdate(query);
+                                    JOptionPane.showMessageDialog(null, "AVION ELIMINADO EXITOSAMENTE");
+
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                }
+                    
+                }
+                
+            }           
+            
+        }
+
+     //---------------------ELIMINAR CLIENTE----------------
+
+
+    public void refrescarBorrarCliente(){
+        
+            try{
+            DefaultTableModel modelo = new DefaultTableModel();
+            borrarCliente.getTbl_clientes().setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConnection();
+
+            String sql = "SELECT idcliente, nombre, email, direccion, telefono FROM cliente";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modelo.addColumn("ID Cliente");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Email");
+            modelo.addColumn("Direccion");
+            modelo.addColumn("Telefono");
+            
+
+            while(rs.next()){
+
+                Object [] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i+1);
+                }
+
+                modelo.addRow(filas);
+            }
+            
+
+            }catch(SQLException ex){
+
+                System.err.println(ex.toString());
+            }
+            
+        }
+
+    public void eliminarCliente(){
+        
+             int indice_1 = borrarCliente.getTbl_clientes().getSelectedRow();   
+            
+            if (indice_1<0) {
+                JOptionPane.showMessageDialog(null, "ESCOJA UN REGISTRO PARA ELIMINAR");
+            }
+            else{
+                
+                
+                Connection con = null;
+                try {
+                    String id = borrarCliente.getTbl_clientes().getValueAt(borrarCliente.getTbl_clientes().getSelectedRow(), 0).toString();
+                    con = Conexion.getConnection();                                    
+                    Statement st = con.createStatement();
+                    String query = "DELETE FROM cliente WHERE idcliente ="+id;
+                                    
+                    st.executeUpdate(query);
+                    JOptionPane.showMessageDialog(null, "CLIENTE ELIMINADO EXITOSAMENTE");
+
+                    } catch (Exception e) {
+                        System.out.println(e);
+                        JOptionPane.showMessageDialog(null, "DEBE ESCOGER UN CLIENTE SIN AVIONES");
+                    }
+                    
+                
+                
+            }
+        }
+
+    //----------------------CONSULTAR FACTURA---------------
+    
+    public void consultaFactura (){
+    
+        
+    }   
 
 }
