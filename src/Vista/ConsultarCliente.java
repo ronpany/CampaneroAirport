@@ -20,6 +20,7 @@ public class ConsultarCliente extends javax.swing.JFrame {
      */
     public ConsultarCliente() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

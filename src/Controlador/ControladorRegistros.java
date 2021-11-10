@@ -8,11 +8,7 @@ package Controlador;
 import Modelo.Conexion;
 import Vista.Alquilar;
 import Vista.AlquilarFinal;
-import Vista.BorrarAvion;
-import Vista.BorrarCliente;
-import Vista.BorrarHangar;
-import Vista.BorrarRegistro;
-import Vista.ConsultaFactura;
+import Vista.CancelarAlquiler;
 import Vista.ConsultarAvion;
 import Vista.ConsultarCliente;
 import Vista.ConsultarHangar;
@@ -28,7 +24,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -53,31 +48,23 @@ public class ControladorRegistros implements ActionListener{
     ConsultarHangar         consultarHangar;
     ConsultarAvion          consultarAvion;
     Factura                 factura;
-    BorrarHangar            borrarHangar;
-    BorrarAvion             borrarAvion;    
-    BorrarCliente           borrarCliente;
-    ConsultaFactura         consultaFactura;
-
+    CancelarAlquiler        cancelar;
     public ControladorRegistros() {
         super();
     }
 
-    public ControladorRegistros(RegistrarHangar registrarHangar,RegistrarCliente registrarCliente, RegistrarAvion registrarAvion,Alquilar alquilarAvion,AlquilarFinal alquilarFinal, Menu menu,ConsultarCliente con,ConsultarHangar conh,ConsultarAvion cona, Factura factura, BorrarHangar bhangar, BorrarAvion bavion, BorrarCliente bcliente, ConsultaFactura cfactura) {
+    public ControladorRegistros(RegistrarHangar registrarHangar,RegistrarCliente registrarCliente, RegistrarAvion registrarAvion,Alquilar alquilarAvion,AlquilarFinal alquilarFinal, Menu menu,ConsultarCliente con,ConsultarHangar conh,ConsultarAvion cona, Factura factura,CancelarAlquiler cana) {
         this.registrarHangar    = registrarHangar;
         this.registrarCliente   = registrarCliente;
         this.registrarAvion     = registrarAvion;
         this.alquilarAvion      = alquilarAvion;
         this.alquilarFinal      = alquilarFinal;
         this.menu               = menu;
-        this.consultarCliente   = con;
-        this.consultarHangar    = conh;
-        this.consultarAvion     = cona;
-        this.factura            = factura;
-        this.borrarHangar       = bhangar;
-        this.borrarAvion        = bavion;
-        this.borrarCliente      = bcliente;
-        this.consultaFactura    = cfactura;
-        
+        this.consultarCliente = con;
+        this.consultarHangar = conh;
+        this.consultarAvion = cona;
+        this.factura= factura;
+        this.cancelar = cana;
         agregarEventos();
         
         menu.setVisible(true);
@@ -102,19 +89,15 @@ public class ControladorRegistros implements ActionListener{
         menu.getBtn_ConsultarAvion().addActionListener(this);
         menu.getBtn_ConsultarHangar().addActionListener(this);
         menu.getBtn_ConsultarCliente().addActionListener(this);
-        menu.getBtn_borrarHangar().addActionListener(this);
-        menu.getBtn_borrarAvion().addActionListener(this);
-        menu.getBtn_borrarCliente().addActionListener(this);
-        menu.getBtn_reporte().addActionListener(this);
+        menu.getBtn_cancelar().addActionListener(this);
         consultarCliente.getBtn_BuscarCliente().addActionListener(this);
         consultarCliente.getBtn_modificar().addActionListener(this);
         consultarHangar.getBtn_BuscarHangar().addActionListener(this);
         consultarHangar.getBtn_modificar().addActionListener(this);
         consultarAvion.getBtn_BuscarAvion().addActionListener(this);
         consultarAvion.getBtn_modificar().addActionListener(this);
-        borrarHangar.getBtn_Eliminar().addActionListener(this);
-        borrarAvion.getBtn_Eliminar().addActionListener(this);
-        borrarCliente.getBtn_Eliminar().addActionListener(this);
+        cancelar.getBtn_CancelarAlquiler().addActionListener(this);
+        
         
     }
         
@@ -207,44 +190,14 @@ public class ControladorRegistros implements ActionListener{
         if(ae.getSource() == consultarCliente.getBtn_modificar()){
             modificarCliente();
         }
-        
-        //----------------------------------BORRAR HANGAR-----------------------------
-        if(ae.getSource() == menu.getBtn_borrarHangar()){
-            borrarHangar.setVisible(true);
-            refrescarBorrarHangar();
+        // --------------------------------- CANCELAR ALQUILER -----------------------
+        if (ae.getSource() == menu.getBtn_cancelar()){
+            cancelarAlquiler();
         }
         
-        if(ae.getSource() == borrarHangar.getBtn_Eliminar()){
-            eliminarHangar();
-            refrescarBorrarHangar();
+        if (ae.getSource() == cancelar.getBtn_CancelarAlquiler()){
+            cancelarAlquilerFinal();
         }
-        
-        //---------------------------------BORRAR AVION------------------------------
-        
-        if(ae.getSource() == menu.getBtn_borrarAvion()){
-            borrarAvion.setVisible(true);
-            refrescarBorrarAvion();
-        }
-        
-        if(ae.getSource() == borrarAvion.getBtn_Eliminar()){
-            eliminarAvion();
-            refrescarBorrarAvion();
-        }
-        
-        //---------------------------------BORRAR CLIENTE----------------------------
-        
-        if(ae.getSource() == menu.getBtn_borrarCliente()){
-            borrarCliente.setVisible(true);
-            refrescarBorrarCliente();
-        }
-        
-        if(ae.getSource() == borrarCliente.getBtn_Eliminar()){
-            eliminarCliente();
-            refrescarBorrarCliente();
-        }
-        
-        
-        
     }
 // ================================== REGISTRAR HANGAR =========================================================================
     public boolean validarCamposHangar(){
@@ -545,7 +498,8 @@ public class ControladorRegistros implements ActionListener{
         
     return band;    
     }
-//================================== ALQUILAR HANGAR ==================================================================================
+    
+    //================================== ALQUILAR HANGAR ==================================================================================
     public void refrescar(){
          try{
             DefaultTableModel modelo = new DefaultTableModel();
@@ -929,7 +883,7 @@ public class ControladorRegistros implements ActionListener{
         return band;
     }
     // Este metodo busca a un cliente por su cedula
-    public boolean buscarClienteconID(int idcliente){
+     public boolean buscarClienteconID(int idcliente){
         boolean band = false;
         Connection con = null;
         try {
@@ -949,7 +903,7 @@ public class ControladorRegistros implements ActionListener{
     return band;
     }
      
-    public void modificarCliente(){
+     public void modificarCliente(){
      
          if(consultarCliente.getTxt_direccion().getText().equals("")||consultarCliente.getTxt_email().getText().equals("")||consultarCliente.getTxt_idcliente().getText().equals("")||consultarCliente.getTxt_nombre().getText().equals("")||consultarCliente.getTxt_telefono().getText().equals("")){
          
@@ -975,9 +929,9 @@ public class ControladorRegistros implements ActionListener{
                                 }
              }else{JOptionPane.showMessageDialog(null, "INGRESE EL ID DE UN CLIENTE EXISTENTE");}
          }
-  }
+     }
  // ---------------------------------- CONSULTAR HANGAR ------------------------------------
-    public boolean consultarHangar(){
+      public boolean consultarHangar(){
         consultarHangar.getTxt_Estado().setEditable(false);
         boolean band = false;
         if (validarCamposConsultatHangar()&&buscarHangarID(Integer.parseInt(consultarHangar.getTxt_Hangar().getText()))){
@@ -1017,7 +971,7 @@ public class ControladorRegistros implements ActionListener{
         return band;
     }
       
-    public boolean validarCamposConsultatHangar(){
+      public boolean validarCamposConsultatHangar(){
           boolean band = false;
           if(consultarHangar.getTxt_Hangar().getText().equals("")){
               JOptionPane.showMessageDialog(null, "INGRESE ID DE HANGAR!");
@@ -1026,7 +980,7 @@ public class ControladorRegistros implements ActionListener{
           return band;
       }
       // Este metodo busca hangar por id
-    public boolean buscarHangarID(int idhangar){
+        public boolean buscarHangarID(int idhangar){
         boolean band = false;
         Connection con = null;
         try {
@@ -1046,7 +1000,7 @@ public class ControladorRegistros implements ActionListener{
     return band;
     }
         
-    public void modificarHangar(){
+        public void modificarHangar(){
         
             if(consultarHangar.getTxt_Alto().getText().equals("")||consultarHangar.getTxt_Ancho().getText().equals("")||consultarHangar.getTxt_Largo().getText().equals("")||consultarHangar.getTxt_Estado().getText().equals("")||consultarHangar.getTxt_tarifa().getText().equals("")){
                 
@@ -1087,7 +1041,7 @@ public class ControladorRegistros implements ActionListener{
  // ---------------------------------- CONSULTAR AVION ----------------------------------------
   
         
-    public boolean consultarAvion(){
+        public boolean consultarAvion(){
             
         consultarAvion.getTxt_Estado().setEditable(false);
         boolean band = false;
@@ -1129,7 +1083,7 @@ public class ControladorRegistros implements ActionListener{
         }
         return band;
     }
-    public boolean validarCamposConsultarAvion(){
+        public boolean validarCamposConsultarAvion(){
             boolean band = false;
             if(consultarAvion.getTxt_Matricula().getText().equals("")){
                 JOptionPane.showMessageDialog(null, "INGRESE MATRICULA!"); 
@@ -1137,7 +1091,7 @@ public class ControladorRegistros implements ActionListener{
             return band;
         }
       // Este metodo busca avion por id
-    public boolean buscarAvionID(int idavion){
+        public boolean buscarAvionID(int idavion){
         boolean band = false;
         Connection con = null;
         try {
@@ -1157,7 +1111,7 @@ public class ControladorRegistros implements ActionListener{
     return band;
     }
 
-    public void modificarAvion(){
+        public void modificarAvion(){
             String v_alto           =consultarAvion.getTxt_Alto().getText();
             String v_ancho          =consultarAvion.getTxt_Ancho().getText();
             String v_largo          =consultarAvion.getTxt_Largo().getText();
@@ -1213,32 +1167,32 @@ public class ControladorRegistros implements ActionListener{
             }
             
         }
-//---------------------ELIMINAR HANGAR-----------------
         
-    public void refrescarBorrarHangar(){
-        
+        //----------------------------- CANCELAR ALQUILER -----------------------------------
+        public void cancelarAlquiler(){
+            cancelar.setVisible(true);
             try{
             DefaultTableModel modelo = new DefaultTableModel();
-            borrarHangar.getTbl_Hangares().setModel(modelo);
+            cancelar.getTable_Registro().setModel(modelo);
 
             PreparedStatement ps = null;
             ResultSet rs = null;
             Conexion conn = new Conexion();
             Connection con = conn.getConnection();
 
-            String sql = "SELECT idhangar, alto, largo, ancho, estado, tarifa FROM hangar";
+            String sql = "SELECT idregistro, entrada, idhangar, idavion, idcliente FROM avion join registro using(idavion) ";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int cantidadColumnas = rsmd.getColumnCount();
 
+            modelo.addColumn("ID Alquiler");
+            modelo.addColumn("Hora Entrada");
             modelo.addColumn("ID Hangar");
-            modelo.addColumn("Alto");
-            modelo.addColumn("Largo");
-            modelo.addColumn("Ancho");
-            modelo.addColumn("Estado");
-            modelo.addColumn("Tarifa/Hora");
+            modelo.addColumn("ID Avion");
+            modelo.addColumn("Cliente");
+            
 
             while(rs.next()){
 
@@ -1256,235 +1210,56 @@ public class ControladorRegistros implements ActionListener{
 
             System.err.println(ex.toString());
         }
-         
-        for(int i = 0; i<borrarHangar.getTbl_Hangares().getRowCount(); i++) {//para recorrer la filas de jtabla
-                           
-                String s = borrarHangar.getTbl_Hangares().getValueAt(i, 4).toString();
-                
-                if(!s.equals("0")){
-                    borrarHangar.getTbl_Hangares().setValueAt("NO DISPONIBLE", i, 4);                   
-                }
-                else{                
-                    borrarHangar.getTbl_Hangares().setValueAt("DISPONIBLE", i, 4);  
-                }             
             
-        }
-            
-        }
-        
-    public void eliminarHangar(){
-        
-            int indice_1 = borrarHangar.getTbl_Hangares().getSelectedRow();   
-            
-            if (indice_1<0) {
-                JOptionPane.showMessageDialog(null, "ESCOJA UN HANGAR PARA ELIMINAR");
-            }
-            else{
-                String estado =borrarHangar.getTbl_Hangares().getValueAt(borrarHangar.getTbl_Hangares().getSelectedRow(), 4).toString();
-               
-                if (estado.equals("NO DISPONIBLE")) {
-                    JOptionPane.showMessageDialog(null, "SOLO PUEDE ELIMINAR HANGARES VACIOS");
-                }
-                
-                else{
-                
-                                Connection con = null;
-                                try {
-                                    String id = borrarHangar.getTbl_Hangares().getValueAt(borrarHangar.getTbl_Hangares().getSelectedRow(), 0).toString();
-                                    con = Conexion.getConnection();                                    
-                                    Statement st = con.createStatement();
-                                    String query = "DELETE FROM hangar WHERE idhangar ="+id;
-                                    
-                                    st.executeUpdate(query);
-                                    JOptionPane.showMessageDialog(null, "HANGAR ELIMINADO EXITOSAMENTE");
-
-                                } catch (Exception e) {
-                                    System.out.println(e);
-                                }
-                    
-                }
-                
-            }
-            
-        
         }
 
-     //---------------------ELIMINAR AVION------------------   
-        
-    public void refrescarBorrarAvion(){
+        public void cancelarAlquilerFinal(){
         
             try{
-            DefaultTableModel modelo = new DefaultTableModel();
-            borrarAvion.getTbl_Aviones().setModel(modelo);
-
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Conexion conn = new Conexion();
-            Connection con = conn.getConnection();
-
-            String sql = "SELECT idavion, alto, largo, ancho, idcliente, estado FROM avion";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int cantidadColumnas = rsmd.getColumnCount();
-
-            modelo.addColumn("Matricula");
-            modelo.addColumn("Alto");
-            modelo.addColumn("Largo");
-            modelo.addColumn("Ancho");
-            modelo.addColumn("ID Cliente");
-            modelo.addColumn("Estado");
-
-            while(rs.next()){
-
-                Object [] filas = new Object[cantidadColumnas];
-
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i+1);
-                }
-
-                modelo.addRow(filas);
-            }
             
-
-        }catch(SQLException ex){
-
-            System.err.println(ex.toString());
-        }
-        
-        for(int i = 0; i<borrarAvion.getTbl_Aviones().getRowCount(); i++) {//para recorrer la filas de jtabla
-                           
-                String s = borrarAvion.getTbl_Aviones().getValueAt(i, 5).toString();
-                
-                if(!s.equals("0")){
-                    borrarAvion.getTbl_Aviones().setValueAt("EN HANGAR", i, 5);                   
-                }
-                else{                
-                    borrarAvion.getTbl_Aviones().setValueAt("SIN HANGAR", i, 5);  
-                }             
-            
-        }
-        
-        }
-
-    public void eliminarAvion(){
-            int indice_1 = borrarAvion.getTbl_Aviones().getSelectedRow();   
-            
-            if (indice_1<0) {
-                JOptionPane.showMessageDialog(null, "ESCOJA UN AVION PARA ELIMINAR");
-            }
-            else{
-                String estado =borrarAvion.getTbl_Aviones().getValueAt(borrarAvion.getTbl_Aviones().getSelectedRow(), 5).toString();
-               
-                if (estado.equals("EN HANGAR")) {
-                    JOptionPane.showMessageDialog(null, "SOLO PUEDE ELIMINAR AVIONES SIN HANGAR");
-                }
-                
-                else{
-                
-                                Connection con = null;
-                                try {
-                                    String id = borrarAvion.getTbl_Aviones().getValueAt(borrarAvion.getTbl_Aviones().getSelectedRow(), 0).toString();
-                                    con = Conexion.getConnection();                                    
-                                    Statement st = con.createStatement();
-                                    String query = "DELETE FROM avion WHERE idavion ="+id;
-                                    
-                                    st.executeUpdate(query);
-                                    JOptionPane.showMessageDialog(null, "AVION ELIMINADO EXITOSAMENTE");
-
-                                } catch (Exception e) {
-                                    System.out.println(e);
-                                }
-                    
-                }
-                
-            }           
-            
-        }
-
-     //---------------------ELIMINAR CLIENTE----------------
-
-
-    public void refrescarBorrarCliente(){
-        
-            try{
-            DefaultTableModel modelo = new DefaultTableModel();
-            borrarCliente.getTbl_clientes().setModel(modelo);
-
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Conexion conn = new Conexion();
-            Connection con = conn.getConnection();
-
-            String sql = "SELECT idcliente, nombre, email, direccion, telefono FROM cliente";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int cantidadColumnas = rsmd.getColumnCount();
-
-            modelo.addColumn("ID Cliente");
-            modelo.addColumn("Nombre");
-            modelo.addColumn("Email");
-            modelo.addColumn("Direccion");
-            modelo.addColumn("Telefono");
-            
-
-            while(rs.next()){
-
-                Object [] filas = new Object[cantidadColumnas];
-
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i+1);
-                }
-
-                modelo.addRow(filas);
-            }
-            
-
-            }catch(SQLException ex){
-
-                System.err.println(ex.toString());
-            }
-            
-        }
-
-    public void eliminarCliente(){
-        
-             int indice_1 = borrarCliente.getTbl_clientes().getSelectedRow();   
-            
-            if (indice_1<0) {
-                JOptionPane.showMessageDialog(null, "ESCOJA UN REGISTRO PARA ELIMINAR");
-            }
-            else{
-                
-                
+                int idhangar = (int)cancelar.getTable_Registro().getValueAt(cancelar.getTable_Registro().getSelectedRow(), 2);
+                String idavion = cancelar.getTable_Registro().getValueAt(cancelar.getTable_Registro().getSelectedRow(), 3).toString();
+                int idregistro = (int)cancelar.getTable_Registro().getValueAt(cancelar.getTable_Registro().getSelectedRow(), 0);
                 Connection con = null;
                 try {
-                    String id = borrarCliente.getTbl_clientes().getValueAt(borrarCliente.getTbl_clientes().getSelectedRow(), 0).toString();
-                    con = Conexion.getConnection();                                    
-                    Statement st = con.createStatement();
-                    String query = "DELETE FROM cliente WHERE idcliente ="+id;
+                    con = Conexion.getConnection();
+                    PreparedStatement ps = con.prepareStatement("DELETE from registro WHERE idregistro ="+idregistro);
+                    int rs = 0;
+                    rs = ps.executeUpdate();
+                    if(rs>0){
+                                con = null;
+                                try {
                                     
-                    st.executeUpdate(query);
-                    JOptionPane.showMessageDialog(null, "CLIENTE ELIMINADO EXITOSAMENTE");
+                                    con = Conexion.getConnection();
+                                    ps = con.prepareStatement("UPDATE avion SET  estado='0' WHERE idavion = '"+idavion+"'"); 
+                                    ps.executeUpdate();
+                                    con = null;
+                                    try {
 
-                    } catch (Exception e) {
-                        System.out.println(e);
-                        JOptionPane.showMessageDialog(null, "DEBE ESCOGER UN CLIENTE SIN AVIONES");
-                    }
-                    
-                
-                
+                                        con = Conexion.getConnection();
+                                        ps = con.prepareStatement("UPDATE hangar SET  estado='0' WHERE idhangar = '"+idhangar+"'"); 
+                                        ps.executeUpdate();
+
+
+                                        JOptionPane.showMessageDialog(null, "ACTUALIZACION EXITOSA");
+                                        cancelarAlquiler();
+
+                                    } catch (Exception e) {
+                                        System.out.println(e);
+                                    }                            
+                                   
+
+                                } catch (Exception e) {
+                                    System.out.println(e);
+                                } 
+                    }else{}
+                } catch (Exception e) {
+                }
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(null, "DEBES SELECCIONAR UN REGISTRO! ");
             }
-        }
-
-    //----------------------CONSULTAR FACTURA---------------
-    
-    public void consultaFactura (){
-    
+            
         
-    }   
+        }
 
 }

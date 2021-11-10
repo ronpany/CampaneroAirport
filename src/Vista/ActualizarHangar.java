@@ -20,6 +20,7 @@ public class ActualizarHangar extends javax.swing.JFrame {
      */
     public ActualizarHangar() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public JLabel getAlto() {

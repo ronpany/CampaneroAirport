@@ -20,6 +20,7 @@ public class ConsultarHangar extends javax.swing.JFrame {
      */
     public ConsultarHangar() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

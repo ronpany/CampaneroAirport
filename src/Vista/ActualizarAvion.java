@@ -19,6 +19,7 @@ public class ActualizarAvion extends javax.swing.JFrame {
      */
     public ActualizarAvion() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public JButton getBtn_ActualizarAvion() {

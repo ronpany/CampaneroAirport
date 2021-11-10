@@ -20,6 +20,7 @@ public class ActualizarCliente extends javax.swing.JFrame {
      */
     public ActualizarCliente() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public JButton getBtn_ActualizarCliente() {

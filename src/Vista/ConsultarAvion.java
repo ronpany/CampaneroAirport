@@ -20,6 +20,7 @@ public class ConsultarAvion extends javax.swing.JFrame {
      */
     public ConsultarAvion() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

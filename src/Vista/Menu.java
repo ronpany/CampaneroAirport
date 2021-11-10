@@ -39,10 +39,7 @@ public class Menu extends javax.swing.JFrame {
         Btn_ConsultarHangar = new javax.swing.JButton();
         Btn_ConsultarCliente = new javax.swing.JButton();
         Btn_ConsultarAvion = new javax.swing.JButton();
-        Btn_borrarHangar = new javax.swing.JButton();
-        Btn_borrarAvion = new javax.swing.JButton();
-        Btn_borrarCliente = new javax.swing.JButton();
-        Btn_reporte = new javax.swing.JButton();
+        Btn_cancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,23 +78,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        Btn_borrarHangar.setText("ELIMINAR HANGAR");
-        Btn_borrarHangar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Btn_borrarHangarActionPerformed(evt);
-            }
-        });
-
-        Btn_borrarAvion.setText("ELMINAR AVION");
-        Btn_borrarAvion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Btn_borrarAvionActionPerformed(evt);
-            }
-        });
-
-        Btn_borrarCliente.setText("ELIMINAR CLIENTE");
-
-        Btn_reporte.setText("GENERAR REPORTE DE PAGO");
+        Btn_cancelar.setText("CANCELAR ALQUILER");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,26 +87,24 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(247, 247, 247))
+                .addGap(154, 154, 154))
             .addGroup(layout.createSequentialGroup()
-                .addGap(110, 110, 110)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(Btn_alquilar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Btn_cliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Btn_hangar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Btn_reporte, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(Btn_ConsultarHangar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Btn_ConsultarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Btn_ConsultarAvion, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)))
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Btn_borrarHangar, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                    .addComponent(Btn_borrarAvion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Btn_borrarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Btn_alquilar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Btn_cliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Btn_hangar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Btn_ConsultarHangar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Btn_ConsultarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Btn_ConsultarAvion, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(Btn_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,21 +114,18 @@ public class Menu extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Btn_hangar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Btn_ConsultarHangar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Btn_borrarHangar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Btn_ConsultarHangar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Btn_cliente, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
-                    .addComponent(Btn_borrarAvion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Btn_ConsultarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Btn_ConsultarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Btn_cliente, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Btn_borrarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Btn_alquilar, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
                     .addComponent(Btn_ConsultarAvion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(Btn_reporte, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Btn_cancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addGap(25, 25, 25))
         );
 
         pack();
@@ -170,14 +146,6 @@ public class Menu extends javax.swing.JFrame {
     private void Btn_ConsultarAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_ConsultarAvionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Btn_ConsultarAvionActionPerformed
-
-    private void Btn_borrarHangarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_borrarHangarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Btn_borrarHangarActionPerformed
-
-    private void Btn_borrarAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_borrarAvionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Btn_borrarAvionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,12 +187,9 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton Btn_ConsultarCliente;
     private javax.swing.JButton Btn_ConsultarHangar;
     private javax.swing.JButton Btn_alquilar;
-    private javax.swing.JButton Btn_borrarAvion;
-    private javax.swing.JButton Btn_borrarCliente;
-    private javax.swing.JButton Btn_borrarHangar;
+    private javax.swing.JButton Btn_cancelar;
     private javax.swing.JButton Btn_cliente;
     private javax.swing.JButton Btn_hangar;
-    private javax.swing.JButton Btn_reporte;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 
@@ -252,6 +217,14 @@ public class Menu extends javax.swing.JFrame {
         this.Btn_hangar = Btn_hangar;
     }
 
+    public JButton getBtn_cancelar() {
+        return Btn_cancelar;
+    }
+
+    public void setBtn_cancelar(JButton Btn_cancelar) {
+        this.Btn_cancelar = Btn_cancelar;
+    }
+
     public JButton getBtn_ConsultarAvion() {
         return Btn_ConsultarAvion;
     }
@@ -275,42 +248,8 @@ public class Menu extends javax.swing.JFrame {
     public void setBtn_ConsultarHangar(JButton Btn_ConsultarHangar) {
         this.Btn_ConsultarHangar = Btn_ConsultarHangar;
     }
-
-    public JButton getBtn_borrarHangar() {
-        return Btn_borrarHangar;
-    }
-
-    public void setBtn_borrarHangar(JButton Btn_borrarHangar) {
-        this.Btn_borrarHangar = Btn_borrarHangar;
-    }
-
-    public JButton getBtn_borrarAvion() {
-        return Btn_borrarAvion;
-    }
-
-    public void setBtn_borrarAvion(JButton Btn_borrarAvion) {
-        this.Btn_borrarAvion = Btn_borrarAvion;
-    }
-
-    public JButton getBtn_borrarCliente() {
-        return Btn_borrarCliente;
-    }
-
-    public void setBtn_borrarCliente(JButton Btn_borrarCliente) {
-        this.Btn_borrarCliente = Btn_borrarCliente;
-    }
-
-    public JButton getBtn_reporte() {
-        return Btn_reporte;
-    }
-
-    public void setBtn_reporte(JButton Btn_reporte) {
-        this.Btn_reporte = Btn_reporte;
-    }
-
     
     
-       
     
     
 

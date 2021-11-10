@@ -26,31 +26,30 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="247" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="110" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="Btn_alquilar" max="32767" attributes="0"/>
-                  <Component id="Btn_cliente" alignment="0" max="32767" attributes="0"/>
-                  <Component id="Btn_hangar" alignment="0" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="Btn_reporte" pref="185" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="Btn_ConsultarHangar" max="32767" attributes="0"/>
-                      <Component id="Btn_ConsultarCliente" max="32767" attributes="0"/>
-                      <Component id="Btn_ConsultarAvion" pref="185" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="110" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="Btn_alquilar" max="32767" attributes="0"/>
+                          <Component id="Btn_cliente" alignment="0" max="32767" attributes="0"/>
+                          <Component id="Btn_hangar" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="Btn_ConsultarHangar" max="32767" attributes="0"/>
+                          <Component id="Btn_ConsultarCliente" max="32767" attributes="0"/>
+                          <Component id="Btn_ConsultarAvion" pref="185" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="176" max="-2" attributes="0"/>
+                      <Component id="Btn_cancelar" min="-2" pref="245" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="Btn_borrarHangar" pref="145" max="32767" attributes="0"/>
-                  <Component id="Btn_borrarAvion" max="32767" attributes="0"/>
-                  <Component id="Btn_borrarCliente" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace pref="100" max="32767" attributes="0"/>
+              <EmptySpace pref="87" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -63,23 +62,20 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Btn_hangar" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
                   <Component id="Btn_ConsultarHangar" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                  <Component id="Btn_borrarHangar" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="Btn_ConsultarCliente" max="32767" attributes="0"/>
                   <Component id="Btn_cliente" pref="52" max="32767" attributes="0"/>
-                  <Component id="Btn_borrarAvion" alignment="0" max="32767" attributes="0"/>
-                  <Component id="Btn_ConsultarCliente" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="Btn_borrarCliente" max="32767" attributes="0"/>
                   <Component id="Btn_alquilar" pref="48" max="32767" attributes="0"/>
-                  <Component id="Btn_ConsultarAvion" alignment="0" max="32767" attributes="0"/>
+                  <Component id="Btn_ConsultarAvion" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="Btn_reporte" min="-2" pref="52" max="-2" attributes="0"/>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="Btn_cancelar" pref="48" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -135,30 +131,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Btn_ConsultarAvionActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="Btn_borrarHangar">
+    <Component class="javax.swing.JButton" name="Btn_cancelar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="ELIMINAR HANGAR"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Btn_borrarHangarActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="Btn_borrarAvion">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="ELMINAR AVION"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Btn_borrarAvionActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="Btn_borrarCliente">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="ELIMINAR CLIENTE"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="Btn_reporte">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="GENERAR REPORTE DE PAGO"/>
+        <Property name="text" type="java.lang.String" value="CANCELAR ALQUILER"/>
       </Properties>
     </Component>
   </SubComponents>
